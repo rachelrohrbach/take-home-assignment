@@ -2,9 +2,10 @@ import './App.css';
 import React from 'react';
 
 function App() {
-  const [textInput, setTextInput] = React.useState(
-    `a badly formatted file. This line is pretty long! It's way more than 80 characters! I feel a line wrap`
-  );
+  const [textInput, setTextInput] = React.useState(`This is
+  a badly formatted file. This line is pretty long! It's way more than 80 characters! I feel a line wrap coming on!
+
+  This      is a second paragraph with extraneous whitespace.`);
   const [textOutput, setTextOutput] = React.useState('');
 
   const handleChange = event => {
@@ -27,40 +28,41 @@ function App() {
     console.log(input.length);
     const maxLineLength = 80;
 
-
     let output = '';
-    let words = input.trim().split(' ');
-    console.log(words);
-    let charCount = 0;
-    for (let i = 0; i < words.length; i++) {
-      if (charCount + words[i].length < maxLineLength) {
-        output += words[i] + ' ';
-        charCount += words[i].length + 1;
-        console.log(output);
-        console.log(output.length);
-        console.log(charCount);
-      } else {
-        output += '\n' + words[i] + ' ';
-        charCount = words[i].length + 1;
-        console.log(output);
-        console.log(charCount);
-      }
-    }
 
-    // let paragraphs = input.split('\n\n');
-    // console.log(paragraphs);
-    // let firstParagraph = paragraphs[0];
-    // console.log(firstParagraph);
-    // for(let j = 0; j < paragraphs.length; j++) {
-    //   if (paragraphs[j] < paragraphs.length - 1) {
-    //     output += '\n\n';
-    //   }
-    // }
+    let paragraphs = input.split('\n\n');
+    console.log(paragraphs);
+    for (const paragraph of paragraphs) {
+      let words = paragraph.split(/\s+/);
+      console.log(words);
+      let charCount = 0;
+
+      for (let i = 0; i < words.length; i++) {
+        if (words[i].length > maxLineLength) {
+          output += words[i] + ' \n';
+        } else {
+          if (charCount + words[i].length < maxLineLength) {
+            output += words[i] + ' ';
+            charCount += words[i].length + 1;
+
+          } else {
+            charCount = 0;
+            output += '\n';
+
+            output += words[i] + ' ';
+            charCount += words[i].length + 1;
+
+          }
+        }
+      }
+      output += '\n\n';
+    }
 
     /*
     your work goes here!
     */
     setTextOutput(output);
+    // "someone's in the house\n\ntwo"
   };
 
   return (
